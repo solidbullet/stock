@@ -2,6 +2,8 @@ from jqdatasdk import *
 import pandas as pd
 import numpy as np
 from pandas import Series,DataFrame
+import time
+import datetime
 auth('13818571403','Jyq810302')
 
 def cal_ban_num( stock,begindate,enddate ):
@@ -26,9 +28,13 @@ stocks = list(get_all_securities(['stock']).index)
 #stocks = ['601865.XSHG','600604.XSHG','600009.XSHG']
 for x in stocks:
     #print(x)
+    d1 = get_security_info(x).start_date
+    d2 = datetime.date.today()
+    if (d2-d1).days < 20:
+        continue
     dict1 = {'id':x,'name':[get_security_info(x).display_name],'count':[cal_ban_num(x,sdate,edate)]}
     d = pd.DataFrame(dict1)
     dict_df = dict_df.append(d)
 dragon = dict_df[dict_df['count'] >= 1].sort_values(by = 'count',ascending = False) #.iloc[0:100]
-dragon.to_csv('c:\\Result.csv')
+dragon.to_csv('c:\\20190301.csv')
 print(dragon)
