@@ -13,14 +13,14 @@ def cal_ban_num( stock,begindate,enddate ):
     while i < len(df):
         #print(df['rise'][len(df) - i - 1])
 
-        if df['rise'][len(df) - i - 1] < 0.09:
+        if df['rise'][len(df) - i - 1] > -0.09:
             break
         i += 1
     return i
 
 #stock = '601519.XSHG'
-sdate = '2019-02-20'
-edate = '2019-03-11'
+sdate = '2019-03-01'
+edate = '2019-03-08'
 #print(cal_ban_num(stock,sdate,edate))
 dict = {'id':['000000.XXXX'],'name':['YYYY'],'连板':[0]}
 dict_df = pd.DataFrame(dict)
@@ -38,5 +38,5 @@ for x in stocks:
     d = pd.DataFrame(dict1)
     dict_df = dict_df.append(d)
 dragon = dict_df[dict_df['连板'] >= 1].sort_values(by = '连板',ascending = False) #.iloc[0:100]
-dragon.to_csv('c:\\stock\\20190308.csv')
+dragon.to_csv('c:\\20190308-minus.csv')
 print(dragon)

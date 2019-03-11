@@ -28,12 +28,23 @@ sdate = '2019-01-01'
 edate = '2019-03-06'
 
 stocks = list(get_all_securities(['stock']).index)
+# stocks = ['601865.XSHG','600604.XSHG','002600.XSHE','000409.XSHE','000631.XSHE','000048.XSHE']
+
+# dfr = {}
+# dfratio = pd.DataFrame(columns=['ratio','id','name'])
 dfratio = pd.DataFrame(index = np.arange(len(stocks)),columns=['ratio','id','name'])
 i = 0
 for x in stocks:
+    name = get_security_info(x).display_name
+    is_ST = 'ST' in name
+    if(is_ST):
+        continue
     dfratio['ratio'][i] = get_ratio(x,sdate,edate)
     dfratio['id'][i] = x
-    dfratio['name'][i] = get_security_info(x).display_name
+    dfratio['name'][i] = name
     i = i+1
     #print(i, sz50['code'].iloc[i])
+dfratio = dfratio.dropna(axis=0,how='any')
 print(dfratio.sort_values(by = 'ratio'))
+
+dfratio.to_csv('c:\\20190308ration.csv')
