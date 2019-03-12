@@ -60,38 +60,26 @@ db=client.stock
 #认证用户密码
 # db.authenticate('jyq','123456')
 
-for x in stocks:
-    # dblist = client.list_database_names()
-    stock_name = get_security_info(x).display_name
-    is_ST = 'ST' in stock_name
-    if(is_ST):
-        continue
-    df = get_price(x, start_date=sdate, end_date=edate, frequency='daily')
-    df['rise'] = 100 * df['close'].pct_change().fillna(0) #计算涨幅，df是涨幅dataframe
-    open = df['open'].iloc[-1] #开盘价
-    high = df['high'].iloc[-1]
-    low = df['low'].iloc[-1]
-    close = df['close'].iloc[-1]
-    volumn = df['money'].iloc[-1] / 100000000
-    rise = df['rise'].iloc[-1] #今日涨幅
-    ratio = get_ratio(df)  #均值回归系数
-    db.origin.insert({'stock_id': x,
-        'stock_name':stock_name,
-        'open':open,
-        'high': high,
-        'low': low,
-        'close': close,
-        'volumn':volumn,
-        'rise':rise,
-        'lianban':cal_ban_num(x,sdate,edate),
-        'ratio':ratio[0],
-        'diff30':ratio[1],
-        'date':edate,
-        'start_date':get_security_info(x).start_date.strftime('%Y-%m-%d')
-    })
 
+dict_df = pd.DataFrame()
+
+mycol = db['origin']
+myquery = {"lianban": {"$gt": 0}}
+mydoc = mycol.find(myquery).sort("lianban",-1)
+for x in mydoc:
+    stockid = x['stock_id']
+    stockname = x['stock_name']
+    lianban_num = x['lianban']
+    ratio = round(x['ratio'],2)
+    diff30 = round(x['diff30'],2)
+    volumn = round(x['volumn'],2)
+    rise = round(x['rise'], 2)
+    dict1 = {'id': [stockid], 'name': [stockname], 'diff30':[diff30],'ratio':[ratio],'volumn':[volumn],'rise':[rise],'lianban': [lianban_num]}
+    d = pd.DataFrame(dict1)
+    dict_df = dict_df.append(d)
 # for item in col.find():
-#     print (item)
+print (dict_df)
+dict_df.to_csv('c:\\stock\\20190312.csv')
 #关闭连接
 client.close()
 
