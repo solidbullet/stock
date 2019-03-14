@@ -39,7 +39,7 @@ def get_ratio(df): #计算均值回归系数
     return res
 
 # stock = '603729.XSHG'
-edate = '2019-03-12'
+edate = '2019-03-14'
 tdate= datetime.datetime.strptime(edate,"%Y-%m-%d")
 delta = datetime.timedelta(days=35)  #取35天的数据，不然均值回归不准，均值回归是按照现价与MA30的差值计算的
 n_days = tdate - delta
@@ -59,7 +59,7 @@ client=MongoClient("localhost",27017)
 db=client.stock
 #认证用户密码
 # db.authenticate('jyq','123456')
-
+db.origin.remove({'date':edate})
 for x in stocks:
     # dblist = client.list_database_names()
     stock_name = get_security_info(x).display_name
