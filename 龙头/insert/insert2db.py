@@ -39,7 +39,7 @@ def get_ratio(df): #计算均值回归系数
     return res
 
 # stock = '603729.XSHG'
-edate = '2019-03-14'
+edate = '2019-03-15'
 tdate= datetime.datetime.strptime(edate,"%Y-%m-%d")
 delta = datetime.timedelta(days=35)  #取35天的数据，不然均值回归不准，均值回归是按照现价与MA30的差值计算的
 n_days = tdate - delta
@@ -68,25 +68,41 @@ for x in stocks:
         continue
     df = get_price(x, start_date=sdate, end_date=edate, frequency='daily')
     df['rise'] = 100 * df['close'].pct_change().fillna(0) #计算涨幅，df是涨幅dataframe
-    open = df['open'].iloc[-1] #开盘价
-    high = df['high'].iloc[-1]
-    low = df['low'].iloc[-1]
-    close = df['close'].iloc[-1]
+
+    open = round(df['open'].iloc[-1],2)  #开盘价
+    high = round(df['high'].iloc[-1],2)
+    low = round(df['low'].iloc[-1],2)
+    close = round(df['close'].iloc[-1],2)
     volumn = df['money'].iloc[-1] / 100000000
-    rise = df['rise'].iloc[-1] #今日涨幅
-    ratio = get_ratio(df)  #均值回归系数
+    rise = round(df['rise'].iloc[-1],2) #今日涨幅
+    ratio = get_ratio(df) #均值回归系数
+    if df['low'].min() and df['low'].min() != 0:
+        vibration = (df['high'].max() - df['low'].min()) / df['low'].min()
+    if (df['high'].max() - df['low'].min()) and (df['high'].max() - df['low'].min()) != 0:
+        reback =  (df['high'].max() -close)/(df['high'].max() - df['low'].min())
+    #计算市值
+    q = query(valuation).filter(valuation.code == x)
+    df_market = get_fundamentals(q, edate)
+    # print(df_market)
+    if df_market.empty:
+        continue
+    market = df_market['market_cap'][0]
+
     db.origin.insert({'stock_id': x,
         'stock_name':stock_name,
         'open':open,
         'high': high,
         'low': low,
         'close': close,
-        'volumn':volumn,
+        'volumn':round(volumn,2),
         'rise':rise,
         'lianban':cal_ban_num(x,sdate,edate),
-        'ratio':ratio[0],
-        'diff30':ratio[1],
+        'ratio':round(ratio[0],2),
+        'diff30':round(ratio[1],2),
         'date':edate,
+        'vibration':round(vibration,2),
+        'reback':round(reback,2),
+        'market':round(market,2),
         'start_date':get_security_info(x).start_date.strftime('%Y-%m-%d')
     })
 

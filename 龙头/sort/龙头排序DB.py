@@ -64,7 +64,7 @@ date = "2019-03-14"
 dict_df = pd.DataFrame()
 
 mycol = db['origin']
-myquery = {"lianban": {"$gte": 0},"date":date}
+myquery = {"lianban": {"$gt": 0},"date":date}
 mydoc = mycol.find(myquery).sort("lianban",-1)
 print(mydoc.count())
 for x in mydoc:
@@ -79,9 +79,10 @@ for x in mydoc:
     d = pd.DataFrame(dict1)
     dict_df = dict_df.append(d)
 # for item in col.find():
-dragon = dict_df.sort_values(by = 'ratio',ascending = False)
+dragon = dict_df.sort_values(by = 'lianban',ascending = False)
 print (dragon)
-dragon.to_csv('c:\\stock\\'+date+'.csv')
+dragon = dragon[(dragon['lianban'] >= 2) &(dragon['lianban'] <= 4)]
+dragon.to_csv('c:\\stock\\'+date+'try.csv')
 #关闭连接
 client.close()
 

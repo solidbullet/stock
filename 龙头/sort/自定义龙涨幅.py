@@ -20,7 +20,7 @@ db=client.stock
 mycol = db['origin']
 
 
-df = pd.read_csv("c:\\stock\\long.csv",dtype=str,encoding="ANSI")
+df = pd.read_csv("c:\\stock\\list\\long.csv",dtype=str,encoding="ANSI")
 
 dict_df = pd.DataFrame()
 for index, row in df.iterrows():
