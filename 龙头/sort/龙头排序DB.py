@@ -39,7 +39,7 @@ def get_ratio(df): #计算均值回归系数
     return res
 
 # stock = '603729.XSHG'
-edate = '2019-03-14'
+edate = '2019-03-20'
 tdate= datetime.datetime.strptime(edate,"%Y-%m-%d")
 delta = datetime.timedelta(days=35)  #取35天的数据，不然均值回归不准，均值回归是按照现价与MA30的差值计算的
 n_days = tdate - delta
@@ -60,7 +60,7 @@ db=client.stock
 #认证用户密码
 # db.authenticate('jyq','123456')
 
-date = "2019-03-14"
+date = "2019-03-27"
 dict_df = pd.DataFrame()
 
 mycol = db['origin']
@@ -75,14 +75,21 @@ for x in mydoc:
     diff30 = round(x['diff30'],2)
     volumn = round(x['volumn'],2)
     rise = round(x['rise'], 2)
-    dict1 = {'id': [stockid], 'name': [stockname], 'diff30':[diff30],'ratio':[ratio],'volumn':[volumn],'lianban': [lianban_num]}
+    reback  = x['reback']
+    vibration = x['vibration']
+    market = x['market']
+    vol_d_mar = round(volumn/market,2)
+
+    dict1 = {'id': [stockid], 'name': [stockname], 'diff30':[diff30],'ratio':[ratio],'volumn':[volumn],'reback':[reback],'vibration':[vibration],'market':[market],'vol_d_mar':[vol_d_mar],'lianban': [lianban_num]}
     d = pd.DataFrame(dict1)
     dict_df = dict_df.append(d)
 # for item in col.find():
 dragon = dict_df.sort_values(by = 'lianban',ascending = False)
+
+# dragon = dragon[dragon['lianban'] == 1]
+# dragon = dragon[(dragon['lianban'] >= 2) &(dragon['lianban'] <= 4)]
+dragon.to_csv('c:\\stock\\'+date+'lianban.csv')
 print (dragon)
-dragon = dragon[(dragon['lianban'] >= 2) &(dragon['lianban'] <= 4)]
-dragon.to_csv('c:\\stock\\'+date+'try.csv')
 #关闭连接
 client.close()
 

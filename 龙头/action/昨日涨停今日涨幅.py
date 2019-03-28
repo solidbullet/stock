@@ -9,7 +9,7 @@ auth('13818571403','Jyq810302')
 
 
 sdate = '2019-03-13'
-edate = '2019-03-22'
+edate = '2019-03-19'
 
 # client=MongoClient("hiiboy.com",27017)
 client=MongoClient("localhost",27017)
@@ -20,7 +20,7 @@ db=client.stock
 mycol = db['origin']
 
 
-df = pd.read_csv("c:\\stock\\list\\long.csv",dtype=str,encoding="ANSI")
+df = pd.read_csv("c:\\stock\\2019-03-18try.csv",dtype=str,encoding="utf8")
 
 dict_df = pd.DataFrame()
 for index, row in df.iterrows():

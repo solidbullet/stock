@@ -17,7 +17,7 @@ db=client.stock
 #认证用户密码
 # db.authenticate('jyq','123456')
 
-today = '2019-03-21'
+today = '2019-03-28'
 tdate= datetime.datetime.strptime(today,"%Y-%m-%d")
 delta = datetime.timedelta(days=1)  #取35天的数据，不然均值回归不准，均值回归是按照现价与MA30的差值计算的
 n_days = tdate - delta
@@ -27,7 +27,7 @@ yesterday = n_days.strftime('%Y-%m-%d')  #从今天往前面数1天的日期
 mycol = db['origin']
 
 num =0
-while (num < 8):
+while (num < 9):
     num = num + 1
     y_count = 0
     dict_df = pd.DataFrame()
@@ -43,10 +43,11 @@ while (num < 8):
         rise = round(x['rise'], 2)
         dict1 = {'id': [stockid], 'name': [stockname], 'lianban': [num + 1],'ratio':[ratio],'diff30':[diff30],'volumn':[volumn]}
         d = pd.DataFrame(dict1)
-        query_rise = {"rise": {"$gt": 9}, "date": today, "stock_id": stockid}
-        mydoc1 = mycol.find_one(query_rise)
+        df = get_price(stockid, start_date=yesterday, end_date=today, frequency='daily')
+        df['rise'] = 100 * df['close'].pct_change().fillna(0)  # 计算涨幅，df是涨幅dataframe
+        rise = df['rise'].iloc[-1]  # 今日涨幅
         cond = (lianban_num == num)
-        if mydoc1 and cond:
+        if rise > 9 and cond:
             dict_df = dict_df.append(d)
         if cond:
             y_count = y_count + 1

@@ -1,6 +1,6 @@
 #-*-coding:utf-8-*-
-#ÎÄ¼şÃû: ch.py
-from pylab import mpl 
-def set_ch(): 
-	mpl.rcParams['font.sans-serif'] = ['FangSong'] # Ö¸¶¨Ä¬ÈÏ×ÖÌå ?
-	mpl.rcParams['axes.unicode_minus'] = False # ½â¾ö±£´æÍ¼ÏñÊÇ¸ººÅ'-'ÏÔÊ¾Îª·½¿éµÄÎÊÌâ
+#æ–‡ä»¶å: ch.py
+from pylab import mpl
+def set_ch():
+	mpl.rcParams['font.sans-serif'] = ['FangSong'] # æŒ‡å®šé»˜è®¤å­—ä½“ ?
+	mpl.rcParams['axes.unicode_minus'] = False # è§£å†³ä¿å­˜å›¾åƒæ˜¯è´Ÿå·'-'æ˜¾ç¤ºä¸ºæ–¹å—çš„é—®é¢˜

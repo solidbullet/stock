@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# -*- coding:utf8 -*-
 from jqdatasdk import *
 import pandas as pd
 import numpy as np
@@ -8,16 +6,16 @@ import time
 import datetime
 from pymongo import MongoClient
 import matplotlib.pyplot as plt
-import ch
-ch.set_ch()
+import pylab as mpl  #导入中文字体，避免显示乱码
 import matplotlib.dates as mdate
 
+mpl.rcParams['font.sans-serif']=['SimHei']  #设置为黑体字
 auth('13818571403','Jyq810302')
 
 
 
 # stock = '603729.XSHG'
-edate = '2019-03-15'
+edate = '2019-03-20'
 
 
 # client=MongoClient("hiiboy.com",27017)
@@ -32,7 +30,7 @@ dict_df = pd.DataFrame()
 
 mycol = db['origin']
 
-i = 8
+i = 20
 while i > 0:
     i = i - 1
     tdate = datetime.datetime.strptime(edate, "%Y-%m-%d")
@@ -55,22 +53,26 @@ while i > 0:
 
     # print("date:%s,次数:%d"%(sdate,count))
 dragon = dict_df.sort_values(by='date', ascending=True)
-dragon = dragon .set_index('date')
-print(dragon)
+# dragon = dragon .set_index('date')
+# print(dragon)
 
-plt.figure(1)   #创建图表1
-# plt.subplot(212)
-plt.ylabel('涨停数量')
-# fig = plt.figure(figsize=(10,6))
-# ax = fig.add_subplot(1,1,1)
-# plt.xaxis.set_major_formatter(mdate.DateFormatter('%b %Y'))
-# plt.plot(dragon)
+# plt.figure(1)   #创建图表1
+# plt.title('curve of stock')
+# plt.ylabel('number of rise > 9%')
+# plt.gca().xaxis.set_major_formatter(mdate.DateFormatter('%m/%d/%Y'))
+# plt.gca().xaxis.set_major_locator(mdate.DayLocator())
+# dragon['count'].plot(figsize=(10,6))
+# plt.gcf().autofmt_xdate()
+# plt.show()
 
-plt.gca().xaxis.set_major_formatter(mdate.DateFormatter('%m/%d/%Y'))
-plt.gca().xaxis.set_major_locator(mdate.DayLocator())
-dragon['count'].plot(figsize=(15,8))
-plt.gcf().autofmt_xdate()
+fig = plt.figure(figsize=(10,6))
+ax = fig.add_subplot(111)
+ax.xaxis.set_major_formatter(mdate.DateFormatter('%Y/%m/%d'))
 
+plt.title("每日涨停数量曲线")
+plt.ylabel('个股涨停数')
+plt.xticks(rotation=45)
+ax.plot(dragon['date'],dragon['count'],color='R')
 plt.show()
 
 rest_holiday=[

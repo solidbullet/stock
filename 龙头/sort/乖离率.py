@@ -25,7 +25,7 @@ def get_ratio(str_code,sdate,edate):
 
 stock = '601519.XSHG'
 sdate = '2019-01-01'
-edate = '2019-03-06'
+edate = '2019-03-19'
 
 stocks = list(get_all_securities(['stock']).index)
 # stocks = ['601865.XSHG','600604.XSHG','002600.XSHE','000409.XSHE','000631.XSHE','000048.XSHE']
@@ -47,4 +47,4 @@ for x in stocks:
 dfratio = dfratio.dropna(axis=0,how='any')
 print(dfratio.sort_values(by = 'ratio'))
 
-dfratio.to_csv('c:\\20190308ration.csv')
+dfratio.to_csv('c:\\20190319ration.csv')

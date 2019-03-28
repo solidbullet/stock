@@ -9,7 +9,7 @@ auth('13818571403','Jyq810302')
 
 
 sdate = '2019-03-13'
-edate = '2019-03-14'
+edate = '2019-03-19'
 
 # client=MongoClient("hiiboy.com",27017)
 client=MongoClient("localhost",27017)
@@ -41,7 +41,7 @@ for index, row in df.iterrows():
     dict1 = {'id':[stockid],'name':[name],'diff30':[diff30],'ratio':[ratio],'volumn':[volumn],'lianban':[lianban],'rise':[rise]}
     d = pd.DataFrame(dict1)
     dict_df = dict_df.append(d)
-dragon = dict_df.sort_values(by = 'diff30',ascending = False)
+dragon = dict_df.sort_values(by = 'lianban',ascending = False)
 print(dragon)
 
 

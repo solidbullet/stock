@@ -33,13 +33,13 @@ def get_ratio(df): #计算均值回归系数
     b['ma30'] = ma30
     b['std'] = std
     b['ratio'] = (b['close'] - b['ma30']) /b['std']
-    b['diff30'] = b['close'] - b['ma30']
+    b['diff30'] = (b['close'] - b['ma30']) /b['close']
     res = [b.iloc[-1]['ratio'],b.iloc[-1]['diff30']] # ratio 考虑了std的均值回归，diff30不考虑std
     # print(b.iloc[-1]['ratio'])
     return res
 
 # stock = '603729.XSHG'
-edate = '2019-03-15'
+edate = '2019-03-28'
 tdate= datetime.datetime.strptime(edate,"%Y-%m-%d")
 delta = datetime.timedelta(days=35)  #取35天的数据，不然均值回归不准，均值回归是按照现价与MA30的差值计算的
 n_days = tdate - delta

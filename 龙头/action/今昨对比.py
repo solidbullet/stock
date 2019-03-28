@@ -17,13 +17,13 @@ db=client.stock
 #认证用户密码
 # db.authenticate('jyq','123456')
 
-today = '2019-03-15'
+today = '2019-03-28'
 tdate= datetime.datetime.strptime(today,"%Y-%m-%d")
 delta = datetime.timedelta(days=1)  #取35天的数据，不然均值回归不准，均值回归是按照现价与MA30的差值计算的
 n_days = tdate - delta
 yesterday = n_days.strftime('%Y-%m-%d')  #从今天往前面数1天的日期
 
-num =2
+num =1
 dict_df = pd.DataFrame()
 mycol = db['origin']
 myquery = {"lianban": {"$gte":num},"date":yesterday}
